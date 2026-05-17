@@ -1,11 +1,11 @@
 ---
 name: update-nature-skills
-description: Sync and install the latest skills from https://github.com/Yuan1z0825/nature-skills.git into the local Codex skill library. Use when the user says they want to update nature skills (for example: "更新nature skills的技能", "更新 nature skills", "同步 nature skills").
+description: Install all skills from https://github.com/Yuan1z0825/nature-skills.git into the local Codex skill library. Use when the user asks to update or install Nature skills (for example: "更新nature skills的技能", "安装 nature skills", "同步 nature skills").
 ---
 
 # Update Nature Skills
 
-When the user asks to update Nature skills, execute this workflow.
+When the user asks to update/install Nature skills, execute this workflow.
 
 ## 1) Prepare destination
 
@@ -17,28 +17,22 @@ When the user asks to update Nature skills, execute this workflow.
 - Clone `https://github.com/Yuan1z0825/nature-skills.git` into a temporary directory.
 - If `git` is unavailable or clone fails, report failure and stop.
 
-## 3) Detect updated skills
+## 3) Install all remote skills
 
-- Compare `skills/` folders from remote and local destination.
-- Treat as update when one of the following is true:
-  - a skill exists remotely but not locally;
-  - a skill exists in both locations but file hashes differ.
+- Enumerate all folders under remote `skills/`.
+- Copy every remote skill folder into local `${CODEX_HOME:-$HOME/.codex}/skills`.
+- Overwrite local folder with the same name to ensure full refresh.
+- Do not delete local skills that are not present in the remote repository.
 
-## 4) Install changed skills only
-
-- Copy only changed/new skill folders from remote `skills/` into local `${CODEX_HOME:-$HOME/.codex}/skills`.
-- Preserve full folder structure and overwrite changed files.
-- Never delete existing local skills automatically.
-
-## 5) Report result
+## 4) Report result
 
 - Return a concise summary:
   - destination path;
-  - list of installed/updated skills;
-  - count of unchanged skills;
+  - list of installed/refreshed skills;
+  - count of installed skills;
   - any errors.
 
-## 6) Preferred command
+## 5) Preferred command
 
 Run:
 
